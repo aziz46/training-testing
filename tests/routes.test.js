@@ -22,12 +22,6 @@ describe('User Test', () => {
   const password = 'admin'; // datainput
   const hashing = hashPassword(password);
   const compare = comparePassword(password, hashing);
-
-  const payloadJwt = {
-    id: 1,
-    email: 'andrey@mail.com',
-  };
-  const payloadString = 'adaaja';
   it('Password compare to be return boolean', () => { // unit testing
     expect(typeof compare).toBe('boolean');
   });
@@ -35,15 +29,15 @@ describe('User Test', () => {
     expect(compare).toEqual(true);
   });
 
-  it('Should return object when using jwt', () => {
-    const generate = generateToken(payloadJwt);
-    const verify = verifyToken(generate);
-    expect(verify).toMatchObject(payloadJwt);
-  });
-  it('should ...', () => {
-    const generate = generateToken(payloadString);
-    const verify = verifyToken(generate);
-    expect(verify).toBe(payloadString);
+  const payloadLogin = {
+    userId: 1,
+    userName: "Aziz",
+    password: "1234567890"
+  };
+  const token = generateToken(payloadLogin);
+  const decoded = verifyToken(token);
+  it('Test JWT', () => {
+    expect(decoded.userId).toEqual(10);
   });
 
   it('should fetch all albums', async () => { // integration testing
@@ -56,6 +50,33 @@ describe('User Test', () => {
     const req = mockRequest();
     const res = mockResponse();
     await PhotoController.getAllPhotos(req, res);
+    expect(res.status).toHaveBeenCalledWith(200);
+  });
+  it('Test get Photos getAllPhotos', async () => {
+    const req = mockRequest();
+    const res = mockResponse();
+    await PhotoController.getAllPhotos(req, res);
+    expect(res.status).toHaveBeenCalledWith(200);
+  });
+
+  it('Test get Photos getOnePhotoByID', async () => {
+    const req = mockRequest({}, {}, {
+      id: 9
+    });
+    const res = mockResponse();
+    await PhotoController.getOnePhotoByID(req, res);
+    expect(res.status).toHaveBeenCalledWith(200);
+  });
+
+  it('Test get Photos createPhoto', async () => {
+    const req = mockRequest({}, {
+      title: "Test Rian",
+      caption: "Test rian caption",
+      image_url: "https://photoliburan.com",
+      UserId: 1
+    });
+    const res = mockResponse();
+    await PhotoController.createPhoto(req, res);
     expect(res.status).toHaveBeenCalledWith(200);
   });
 

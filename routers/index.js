@@ -7,7 +7,7 @@ const authorization = require('../middlewares/authorization');
 router.post('/users/register', UserController.register);
 router.post('/users/login', UserController.login);
 
-router.get('/photos', PhotoController.getAllPhotos);
+router.get('/photos', authentication, PhotoController.getAllPhotos);
 router.get('/photos/:id', PhotoController.getOnePhotoByID);
 router.post('/photos', authentication, PhotoController.createPhoto);
 router.put('/photos/:id', authentication, authorization, PhotoController.updatePhoto);
